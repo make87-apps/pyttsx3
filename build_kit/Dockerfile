@@ -69,4 +69,8 @@ WORKDIR /app
 ENV PYTHONPATH=/app
 ENV PATH="${VIRTUAL_ENV}/bin:$PATH"
 
+# Health check for TTS functionality
+HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
+    CMD python3 -c "import pyttsx3; engine = pyttsx3.init(); print('TTS engine initialized successfully')" || exit 1
+
 ENTRYPOINT ["/make87/venv/bin/python3", "-m", "app.main"]
