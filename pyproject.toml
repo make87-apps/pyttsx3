@@ -9,13 +9,10 @@ dependencies = [
     "make87[zenoh,protobuf]>=0.1.0",
     "make87_messages>=0.2.8",
     "numpy",
-    # Primary TTS engine (recommended)
-    "gtts>=2.3.0",
-    "pydub>=0.25.0",
-    # Fallback TTS engine (optional)
+    # Offline TTS engine
     "pyttsx3>=2.90",
 ]
-description = "Text-to-Speech service with Zenoh messaging"
+description = "Offline Text-to-Speech service with Zenoh messaging"
 readme = "README.md"
 requires-python = ">=3.9,<3.13"
 
