@@ -6,17 +6,21 @@ interfaces:
       name: zenoh
       protocol: TCP
       target_port: 7447
+      publish_mode: Ingress
+      is_system_interface: false
+      is_dev_interface: false
     publishers:
-      - name: outgoing_message
+      - name: tts_audio
         spec:
-          make87_message: make87_messages.text.PlainText
-        encoding: proto
+          make87_message: make87_messages.audio.frame_pcm_s16le.FramePcmS16le:3dq2tw
         config:
           type: object
           properties:
             congestion_control:
               type: string
-              enum: [ DROP, BLOCK ]
+              enum:
+                - DROP
+                - BLOCK
               default: DROP
             priority:
               type: string
@@ -34,8 +38,33 @@ interfaces:
               default: true
             reliability:
               type: string
-              enum: [ BEST_EFFORT, RELIABLE ]
+              enum:
+                - BEST_EFFORT
+                - RELIABLE
               default: RELIABLE
+        encoding: proto
+    subscribers:
+      - name: tts_text
+        spec:
+          string: string
+        config:
+          type: object
+          properties:
+            handler:
+              type: object
+              properties:
+                handler_type:
+                  type: string
+                  enum:
+                    - FIFO
+                    - RING
+                  default: RING
+                capacity:
+                  type: integer
+                  minimum: 0
+                  description: Capacity of the handler. For FIFO, this is the maximum number of messages it can hold. For RING, this is the size of the ring buffer.
+                  default: 10
+        encoding: utf-8
 container_config:
   environment:
     RUST_LOG: info
@@ -45,3 +74,5 @@ build:
 dev_build:
   build_kit:
     name: python3
+    build_additions:
+      ide: vscode_server_py3
