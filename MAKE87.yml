@@ -76,3 +76,4 @@ dev_build:
     name: python3
     build_additions:
       ide: vscode_server_py3
+      ssh: ssh_server
